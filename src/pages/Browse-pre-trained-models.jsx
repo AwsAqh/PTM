@@ -58,13 +58,15 @@ const BrowsePreTrainedModels = () => {
             headers: { "Content-type": "application/json" }
         })
         const data = await response.json()
+      
+        console.log("data : ",data)
         if(!response.ok) {
           console.log("error retrieving data ")
-          setError(data.msg)
+          setError(data.error)
         }
         
-        setModels(data.models)
-        setFilteredModels(data.models)
+        setModels(data.models || [])
+        setFilteredModels(data.models || [])
         setUserName(data.userName)
       }
       else {
@@ -130,10 +132,10 @@ const BrowsePreTrainedModels = () => {
           </div>
         </div>
       </div> 
-
-      {id && <div style={{fontSize:"20px",fontWeight:"bold",marginBottom:"20px", color:"#fff"}}>Models by {userName} </div>}
+      {id && !error && <div style={{fontSize:"20px",fontWeight:"bold",marginBottom:"20px", color:"#fff"}}>Models by {userName} </div>}
       {error && <div style={{fontSize:"20px",fontWeight:"bold",marginBottom:"20px", color:"#fff"}}>{error}</div>}
-      {!error && <div className='models-container'>
+      {models.length === 0 && !error && <div>No models found.</div>}
+      <div className='models-container'>
         {filteredModels.map((model, index) => 
           <PreTrainedModelBlock 
             key={index} 
@@ -147,7 +149,7 @@ const BrowsePreTrainedModels = () => {
             id={model._id} 
           />
         )}
-      </div>}
+      </div>
     </div>
   )
 }

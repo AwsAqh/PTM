@@ -224,23 +224,28 @@ const {id}=req.params
   }
 }
 
-const getModelsByUser=async(req,res)=>{
-  const {id}=req.params
-  try{
-    const user=await User.findById(id,"name")
-    if(!user){
-      return res.status(404).json({msg:"user not found"})
-    }
-    const models=await Model.find({createdBy:id})
-    if(!models){
-      return res.status(404).json({msg:"no models found"})
-    }
-  
-    res.status(200).json({models:models,userName:user.name})
+const getModelsByUser = async (req, res) => {
+  const userId = req.params.id;
+
+  // Validate ObjectId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ models: [], error: 'Invalid user ID format.' });
   }
-  catch(err){
-    console.log("error retrieving models from database : ",err)
-    res.status(500).json({msg:"error happend while retrieving models from database"})
+
+  try {
+    const user = await User.findById(userId);
+    console.log("user : ",user)
+    if (!user) {
+      return res.status(400).json({ models: [], error: 'User not found.' });
+    }
+    const models = await Model.find({ createdBy: userId });
+    if (!models || models.length === 0) {
+      return res.status(200).json({ models: [], error: "No models found for this user." });
+    }
+    res.status(200).json({ models: models, userName: user.name });
+  } catch (err) {
+    console.log("error retrieving models from database : ", err);
+    res.status(500).json({ models: [], error: "Error happened while retrieving models from database" });
   }
 }
 
