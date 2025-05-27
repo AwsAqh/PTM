@@ -154,7 +154,7 @@ const ClassifyImage = () => {
         />
       )}
       <div className="classify-page-content">
-        <AuthorInfo createdBy={createdBy} authorEmail={createdBy.email} authorName={createdBy.name} />
+        <AuthorInfo createdBy={createdBy.id} authorEmail={createdBy.email} authorName={createdBy.name} modelId={id} />
       <div className='classify-content'>
         <div className='model-information'>
           <span>{modelName}</span>
