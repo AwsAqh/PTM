@@ -228,6 +228,9 @@ const getModelsByUser=async(req,res)=>{
   const {id}=req.params
   try{
     const user=await User.findById(id,"name")
+    if(!user){
+      return res.status(404).json({msg:"user not found"})
+    }
     const models=await Model.find({createdBy:id})
     if(!models){
       return res.status(404).json({msg:"no models found"})

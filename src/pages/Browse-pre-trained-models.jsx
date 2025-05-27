@@ -15,6 +15,7 @@ const BrowsePreTrainedModels = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredModels, setFilteredModels] = useState([]);
   const [userName, setUserName] = useState('')
+  const [error, setError] = useState(null)
   const {id} = useParams()
 
   useEffect(() => { 
@@ -56,10 +57,12 @@ const BrowsePreTrainedModels = () => {
             method: "GET",
             headers: { "Content-type": "application/json" }
         })
+        const data = await response.json()
         if(!response.ok) {
           console.log("error retrieving data ")
+          setError(data.msg)
         }
-        const data = await response.json()
+        
         setModels(data.models)
         setFilteredModels(data.models)
         setUserName(data.userName)
@@ -127,8 +130,10 @@ const BrowsePreTrainedModels = () => {
           </div>
         </div>
       </div> 
+
       {id && <div style={{fontSize:"20px",fontWeight:"bold",marginBottom:"20px", color:"#fff"}}>Models by {userName} </div>}
-      <div className='models-container'>
+      {error && <div style={{fontSize:"20px",fontWeight:"bold",marginBottom:"20px", color:"#fff"}}>{error}</div>}
+      {!error && <div className='models-container'>
         {filteredModels.map((model, index) => 
           <PreTrainedModelBlock 
             key={index} 
@@ -142,7 +147,7 @@ const BrowsePreTrainedModels = () => {
             id={model._id} 
           />
         )}
-      </div>
+      </div>}
     </div>
   )
 }
