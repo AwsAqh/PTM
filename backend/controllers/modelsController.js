@@ -113,8 +113,8 @@ const getModels = async (req, res) => {
             const user = await User.findById(model.createdBy);
             return {
                 ...model.toObject(),
-                creatorEmail: user.email,
-                creatorName: user.name
+              //  creatorEmail: user.email,
+                //creatorName: user.name
             };
         }));
         res.status(200).json(modelsWithUsers);
