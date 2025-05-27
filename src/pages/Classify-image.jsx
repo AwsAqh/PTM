@@ -153,7 +153,7 @@ const ClassifyImage = () => {
           onClose={() => setNotification(prev => ({ ...prev, show: false }))}
         />
       )}
-      <div className="page-content">
+      <div className="classify-page-content">
         <AuthorInfo createdBy={createdBy} authorEmail={createdBy.email} authorName={createdBy.name} />
       <div className='classify-content'>
         <div className='model-information'>
